@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import static com.example.springbootsecurity.security.AppUserRole.*;
+
 @Configuration
 @EnableWebSecurity
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -26,23 +28,29 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/", "index", "/css/*", "/js/*")
-            .permitAll()
-            .anyRequest()
-            .authenticated()
-            .and()
-            .httpBasic();
+                .antMatchers("/", "index", "/css/*", "/js/*")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic();
     }
 
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
         UserDetails franzPupsUser = User.builder()
-            .username("franzpups")
-            .password(passwordEncoder.encode("pass"))
-            .roles("STUDENT") // ROLE_STUDENT
-            .build();
+                .username("franzpups")
+                .password(passwordEncoder.encode("pass"))
+                .roles(STUDENT.name()) // ROLE_STUDENT
+                .build();
 
-        return new InMemoryUserDetailsManager(franzPupsUser);
+        UserDetails sofiaBiancoUser = User.builder()
+                .username("sofiabianco")
+                .password(passwordEncoder.encode("pass123"))
+                .roles(ADMIN.name())
+                .build();
+
+        return new InMemoryUserDetailsManager(franzPupsUser, sofiaBiancoUser);
     }
 }
