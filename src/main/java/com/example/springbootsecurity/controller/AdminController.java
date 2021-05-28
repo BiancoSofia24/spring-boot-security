@@ -1,6 +1,7 @@
 package com.example.springbootsecurity.controller;
 
 import com.example.springbootsecurity.models.Student;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -17,24 +18,28 @@ public class AdminController {
     );
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TRAINEE')")
     public List<Student> getAllStudents() {
         System.out.println("getAllStudents");
         return STUDENTS;
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('student:write')")
     public void addStudent(@RequestBody Student student) {
         System.out.println("addstudent");
         System.out.println(student);
     }
 
     @DeleteMapping(path = "{studentId}")
+    @PreAuthorize("hasAuthority('student:write')")
     public void deleteStudent(@PathVariable("studentId") Long id) {
         System.out.println("deleteStudent");
         System.out.println(id);
     }
 
     @PutMapping(path = "{studentId}")
+    @PreAuthorize("hasAuthority('student:write')")
     public void updateStudent(@PathVariable("studentId") Long id, @RequestBody Student student) {
         System.out.println("updateStudent");
         System.out.println(id + " " + student);
