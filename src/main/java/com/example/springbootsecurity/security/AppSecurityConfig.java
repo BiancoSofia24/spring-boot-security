@@ -3,7 +3,6 @@ package com.example.springbootsecurity.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,10 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.example.springbootsecurity.security.AppUserRole.*;
-import static com.example.springbootsecurity.security.AppUserPermission.*;
 
 @Configuration
 @EnableWebSecurity
@@ -40,7 +37,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin();
+                .formLogin()
+                .loginPage("/login").permitAll()
+                .defaultSuccessUrl("/courses", true);
     }
 
     @Override
@@ -49,21 +48,18 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails franzUser = User.builder()
                 .username("franzpups")
                 .password(passwordEncoder.encode("pass"))
-//                .roles(STUDENT.name()) // ROLE_STUDENT
                 .authorities(STUDENT.getGrantedAuthorities())
                 .build();
 
         UserDetails sofiaUser = User.builder()
                 .username("sofiabianco")
                 .password(passwordEncoder.encode("pass"))
-//                .roles(ADMIN.name()) // ROLE_ADMIN
                 .authorities(ADMIN.getGrantedAuthorities())
                 .build();
 
         UserDetails tomUser = User.builder()
                 .username("tomjones")
                 .password(passwordEncoder.encode("pass"))
-//                .roles(TRAINEE.name()) // ROLE_TRAINEE
                 .authorities(TRAINEE.getGrantedAuthorities())
                 .build();
 
