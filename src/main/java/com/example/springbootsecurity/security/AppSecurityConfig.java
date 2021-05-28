@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.example.springbootsecurity.security.AppUserRole.*;
 import static com.example.springbootsecurity.security.AppUserPermission.*;
@@ -32,14 +33,11 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
-//                .antMatchers(HttpMethod.DELETE, "/admin/api/**").hasAuthority(COURSE_WRITE.getPermission())
-//                .antMatchers(HttpMethod.POST, "/admin/api/**").hasAuthority(COURSE_WRITE.getPermission())
-//                .antMatchers(HttpMethod.PUT, "/admin/api/**").hasAuthority(COURSE_WRITE.getPermission())
-//                .antMatchers(HttpMethod.GET, "/admin/api/**").hasAnyRole(ADMIN.name(), TRAINEE.name())
                 .anyRequest()
                 .authenticated()
                 .and()
