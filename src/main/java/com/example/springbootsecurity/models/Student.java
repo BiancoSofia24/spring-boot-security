@@ -18,4 +18,11 @@ public class Student {
         return this.name;
     }
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
