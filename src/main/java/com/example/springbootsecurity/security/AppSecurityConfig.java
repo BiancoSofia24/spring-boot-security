@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.example.springbootsecurity.security.AppUserRole.*;
 
 @Configuration
@@ -39,26 +41,30 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/courses", true);
+                .defaultSuccessUrl("/courses", true)
+                .and()
+                .rememberMe()
+                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
+                .key("anysecurekey");
     }
 
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
         UserDetails franzUser = User.builder()
-                .username("franzpups")
+                .username("franz")
                 .password(passwordEncoder.encode("pass"))
                 .authorities(STUDENT.getGrantedAuthorities())
                 .build();
 
         UserDetails sofiaUser = User.builder()
-                .username("sofiabianco")
+                .username("sofia")
                 .password(passwordEncoder.encode("pass"))
                 .authorities(ADMIN.getGrantedAuthorities())
                 .build();
 
         UserDetails tomUser = User.builder()
-                .username("tomjones")
+                .username("tom")
                 .password(passwordEncoder.encode("pass"))
                 .authorities(TRAINEE.getGrantedAuthorities())
                 .build();
