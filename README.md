@@ -6,4 +6,6 @@ Focus on **Spring Boot Security**
 - Spring Boot Web
 - Spring Boot Security
 - Google Guava
+- JSON Web Token
 - Thymeleaf
+- Devtools
